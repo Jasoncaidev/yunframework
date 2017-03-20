@@ -1,0 +1,74 @@
+@charset "utf-8";
+/**
+ * @file style.css
+ * @copyright     Copyright 2016-2046, Yunframework Foundation, Inc. (http://www.yunframework.com)
+ * @link          http://yunframework.yunframework Yunframework Project
+ * @since         Yunframework v0.1
+ * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
+ *
+ **/
+*{margin:0;padding:0;outline:none;}
+html{
+
+}
+body{	
+	margin:0;
+	padding:0;
+	height:100%;
+	background:url('') no-repeat 0 0;
+	}
+a{color:#fff;text-decoration:none;}
+a:hover{text-decoration:underline;}
+table.full{border-collapse: collapse;width:100%;height:100%;}
+.vat{vertical-align:top;}
+.f10{font-size:10px;}
+.f12{font-size:12px;}
+.f14{font-size:14px;}
+.f16{font-size:16px;}
+.w960{width:960px;}
+.w1200{width:1200px;}
+.w600{width:600px;}
+.w300{width:300px;}
+.w200{width:200px;}
+.w100{width:100px;}
+.w50{width:50px;}
+.wp100{width:100px;}
+.wp50{width:50%;}
+.cl{clear:both;}
+.fl{float:left;}
+.fr{float:right;}
+.p1{padding:1px;}
+.p2{padding:2px;}
+.p5{padding:5px;}
+.p10{padding:10px;}
+.p15{padding:15px;}
+.p20{padding:20px;}
+.pt1{padding-top:1px;}
+.pt2{padding-top:2px;}
+.pt5{padding-top:5px;}
+.pt10{padding-top:10px;}
+.pt15{padding-top:15px;}
+.pt20{padding-top:20px;}
+.pb1{padding-bottom:1px;}
+.pb2{padding-bottom:2px;}
+.pb5{padding-bottom:5px;}
+.pb10{padding-bottom:10px;}
+.pb15{padding-bottom:15px;}
+.pb20{padding-bottom:20px;}
+.tac{text-align:center;}
+.container{margin:0 auto;height:100%;width:100%;}
+.app .hd,.none{display:none !important;}
+.flush-messages{padding:0px 0px;}
+.flush-messages .error{
+	background:url("") no-repeat 3px 5px #FFF;
+	border:1px solid #E9B017;
+	line-height: 25px;
+    padding: 5px 10px 5px 30px;
+	color:#f00 !important;
+}
+.flush-messages .message{
+	background:url("") no-repeat 3px 5px #008800;
+	line-height: 25px;
+    padding: 5px 10px 5px 30px;
+	color:#0f0 !important;
+}

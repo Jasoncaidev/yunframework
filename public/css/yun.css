@@ -1,0 +1,45 @@
+@charset "utf-8";
+/**
+ * @file yun.css
+ * @copyright     Copyright 2016-2046, Yunframework Foundation, Inc. (http://www.yunframework.com)
+ * @link          http://yunframework.yunframework Yunframework Project
+ * @since         Yunframework v1.0
+ * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
+ *
+ **/
+ html{}
+ body{background:#99FF99;}
+.yf-page{
+	
+}
+.yf-wrap{
+	padding:0;
+}
+.yf-header{
+	padding:15px;
+	background:#067B06;
+}
+ul.link li{
+	padding:5px;
+	float:left;
+	list-style:none;
+}
+ul.link li a{
+	
+}
+.yf-main{
+	padding:20px 15px;
+	background:#0BB10B;
+	min-height:100px;
+}
+.yf-footer{
+	padding:15px;
+	height:150px;
+	background:#24CF24;
+}
+.yf-copyright{
+	padding:15px;
+	background:#4BE44B;
+	height:200px;
+	color:#fff;
+}
