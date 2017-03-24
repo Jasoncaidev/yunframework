@@ -119,7 +119,7 @@ abstract class Router{
 		}elseif(empty(self::$action)){
 			throw new \Exception('Action未找到！', 404);
 		}
-		if(!is_dir(APP_ROOT.'App/'.self::$module)){
+		if(!is_dir(APP_ROOT.'Apps/'.self::$module)){
 			throw new \Exception('不存在此模块：'.self::$module, 404);
 		}
 	}

@@ -57,6 +57,7 @@ abstract class Controller{
 				$this->$action();
 				$ob_content = ob_get_clean();
 				$this->saveHtmlCache($ob_content);
+                //debug($ob_content);
 				echo $ob_content;
 			}
 		}else{

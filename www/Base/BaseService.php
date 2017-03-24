@@ -1,6 +1,6 @@
 <?php
 
-namespace Base;
+namespace www\Base;
 
 use Yun\Classes\Service;
 class BaseService extends Service{

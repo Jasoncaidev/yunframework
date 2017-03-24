@@ -77,6 +77,7 @@ abstract class App{
      * @return null
      * */
     public static function launch(){
+//        debug(self::$controller);
         return self::$controller->doAction(self::$action);
     }
     /*加载配置
@@ -110,12 +111,13 @@ abstract class App{
         if(Router::$match != null) {
             self::$module =  Router::$module;
             self::$controllerName =  Router::$controller;
-            self::$controllerFullName =  'App\\'.Router::$module . '\\Controller\\' . Router::$controller .'Controller';
+            self::$controllerFullName =  'www\Apps\\'.Router::$module . '\\Controller\\' . Router::$controller .'Controller';
 //            debug(self::$controllerFullName);
             self::$action = Router::$action;
             define('YUN_MODULE',self::$module);
             define('YUN_CONTROLLER',self::$controllerName);
             define('YUN_ACTION',self::$action);
+
             try{
                 $class =  new \ReflectionClass(self::$controllerFullName);
                 //实例化控制器
@@ -126,8 +128,7 @@ abstract class App{
             }
             self::$params = Router::$params;
         }else{
-//            self::$errors[] = '404错误，访问的页面不存在！';
-            throw \Exception('404错误，访问的页面不存在！',404);
+            throw new \Exception('404错误，访问的页面不存在！',404);
         }
     }
 

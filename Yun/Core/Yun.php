@@ -139,7 +139,8 @@ abstract class Yun{
      * 错误处理
      * */
     public static function errorHandler($code, $error, $file = NULL, $line = NULL){
-		if($code == E_ERROR){
+//        debug(func_get_args(),0);
+		if( in_array($code,[E_ERROR,E_USER_ERROR,E_USER_NOTICE]) ){
 			systemlog(func_get_args());
 			if ( ! headers_sent()){
 				header("HTTP/1.1 500 Internal Server Error");

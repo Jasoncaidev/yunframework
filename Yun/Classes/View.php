@@ -67,15 +67,15 @@ class View{
 		$tpl = $template == ''?$this->tpl:$template;
 		extract($this->vars,EXTR_SKIP);
 		if(empty($tpl)){
-			$tpl_file = APP_ROOT .'App'.DS. Router::$module.DS.'View'.DS.App::$controller->theme.DS.strtolower(App::$controllerName.DS.str_replace(DOT.YTP,'',App::$action).DOT.YTP);
+			$tpl_file = APP_ROOT .'Apps'.DS. Router::$module.DS.'View'.DS.App::$controller->theme.DS.strtolower(App::$controllerName.DS.str_replace(DOT.YTP,'',App::$action).DOT.YTP);
 		}else{
-			$tpl_file = APP_ROOT .'App'.DS. Router::$module.DS.'View'.DS.App::$controller->theme.DS.strtolower(App::$controllerName.DS.str_replace(DOT.YTP,'',$tpl).DOT.YTP);;
+			$tpl_file = APP_ROOT .'Apps'.DS. Router::$module.DS.'View'.DS.App::$controller->theme.DS.strtolower(App::$controllerName.DS.str_replace(DOT.YTP,'',$tpl).DOT.YTP);;
 		}
 		if(!file_exists($tpl_file)){
 			//TODO
 			App::$errors[] = '找不到模板文件：'.$tpl_file;
 			$this->errors[] ='找不到模板文件：'.$tpl_file;
-			trigger_error('找不到模板文件：'.$tpl_file);
+			trigger_error('找不到模板文件：'.$tpl_file,E_USER_ERROR);
 		}else{
 			include $tpl_file;
 		}
@@ -92,7 +92,7 @@ class View{
         //echo Html::file('1111111111');exit;
 		extract($this->vars,EXTR_SKIP);
 		if(!empty(App::$controller->layout)){
-			$layout_tpl_file = APP_ROOT .'App'.DS. Router::$module.DS.'View'.DS.App::$controller->theme.DS.strtolower('layouts'.DS.str_replace(DOT.YTP,'',App::$controller->layout).DOT.YTP);
+			$layout_tpl_file = APP_ROOT .'Apps'.DS. Router::$module.DS.'View'.DS.App::$controller->theme.DS.strtolower('layouts'.DS.str_replace(DOT.YTP,'',App::$controller->layout).DOT.YTP);
 		}else{
 			trigger_error('LAYOUT LOADING ERROR!');
 		}
@@ -100,7 +100,7 @@ class View{
 			//TODO
 			App::$errors[] = '找不到模板文件：'.$layout_tpl_file;
 			$this->errors[] ='找不到模板文件：'.$layout_tpl_file;
-			trigger_error('找不到模板文件：'.$layout_tpl_file);
+			trigger_error('找不到模板文件：'.$layout_tpl_file,E_USER_ERROR);
 		}else{
 			include_once $layout_tpl_file;
 		}
@@ -112,6 +112,7 @@ class View{
 	 * 
 	 */
 	public function display($tpl = ""){
+
 		$this->tpl = $tpl;
 		if(count(App::$errors) > 0  ){
             debug(App::$errors);exit;
@@ -132,17 +133,17 @@ class View{
 	public function element($element){
 		extract($this->vars,EXTR_SKIP);
 		if(!empty($element)){
-			$element_tpl_file = APP_ROOT .'App'.DS. Router::$module.DS.'View'.DS.App::$controller->theme.DS.strtolower('elements'.DS.str_replace(DOT.YTP,'',$element).DOT.YTP);
+			$element_tpl_file = APP_ROOT .'Apps'.DS. Router::$module.DS.'View'.DS.App::$controller->theme.DS.strtolower('elements'.DS.str_replace(DOT.YTP,'',$element).DOT.YTP);
 		}
 		else{
-			trigger_error('ELEMENT LOADING ERROR!');
+			trigger_error('ELEMENT LOADING ERROR!',E_USER_ERROR);
 		}
 
 		if(!file_exists($element_tpl_file)){
 			//TODO
 			App::$errors[] = '找不到模板文件：'.$element_tpl_file;
 			$this->errors[] ='找不到模板文件：'.$element_tpl_file;
-			trigger_error('找不到模板文件：'.$element_tpl_file);
+			trigger_error('找不到模板文件：'.$element_tpl_file,E_USER_ERROR);
 		}else{
 			include $element_tpl_file;
 		}
