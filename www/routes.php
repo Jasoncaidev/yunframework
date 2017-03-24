@@ -15,7 +15,7 @@
 use Yun\Core\Router;
 class Routes{
 	//设置默认APP目录
-	public static $defaultModule = 'Dtn';
+	public static $defaultModule = 'App';
     /* 
 	 * @desc 设置路由重写，可以为固定字符串或者正则表达式，规则从上到下匹配，以第一条匹配为准，所以请按优先级高低书写
 	 * 		  默认路由规则为：/cn/app/controller/action?xxx 形式，set方法第一个参数可以为字符串或正则
