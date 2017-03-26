@@ -183,7 +183,7 @@ abstract class Yun{
                 }else{
                     header("HTTP/1.1 500 Internal Server Error");
                 }
-                if(class_exists('\App\\'.strtolower(App::$module).'\Controller\ErrorController')){
+                if(class_exists('\Apps\\'.strtolower(App::$module).'\Controller\ErrorController')){
                     header('Location: '.url('/error/index'));
                 }else{
                     header('Location: '.url('/'.strtolower(Router::$defaultModule).'/error/index'));

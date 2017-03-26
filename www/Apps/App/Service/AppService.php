@@ -12,8 +12,8 @@
  **/
 namespace www\Apps\App\Service;
 
-use Yun\Classes\Service;
-class AppService extends Service{
+use www\Base\BaseService;
+class AppService extends BaseService{
 
     public  function __construct(){
         //echo 'controller/';

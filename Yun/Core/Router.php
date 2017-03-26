@@ -111,6 +111,12 @@ abstract class Router{
 
 //		debug(self::$routes);
 //		debug(self::$match);
+        if(is_null(self::$match)){
+            self::$lang = App::$request->get['lang'];
+            self::$module = App::$request->get['m'];
+            self::$controller = App::$request->get['c'];
+            self::$action = App::$request->get['a'];
+        }
 //		debug(self::$lang.'-'.self::$module.'-'.self::$controller.'-'.self::$action);
 		if(empty(self::$module)){
 			throw new \Exception('模块未找到！', 404);
@@ -151,7 +157,7 @@ abstract class Router{
 			//如果为正则字符串
 			//如果匹配
 			if(preg_match($uri,App::$request->here)){
-//				debug(func_get_args());
+//				debug(func_get_args(),0);
 				self::$match = array('uri'=>$uri,'rule'=>$route);
 				preg_match_all($uri,App::$request->here,$uri_matches);
 				if(empty($route['lang']))
@@ -199,12 +205,13 @@ abstract class Router{
                 if(!empty($_request_params)){
                     foreach($_request_params as $name => $offset){
                         preg_match('{(\d+)}',$offset,$param_match);
-//                        debug($param_match);
-                        App::$request->get[$name] = $uri_matches[$param_match[1]][0];
+                        App::$request->get[$name] = $_GET[$name] = $uri_matches[$param_match[1]][0];
                     }
 
                 }
+//                debug(self::$lang);
 				return true;
+
 			}
 		}
 		return false;
@@ -227,39 +234,52 @@ abstract class Router{
 	 *  */
 	public static function __defaultRoute(){
         array_push(self::$routes,array('uri'=>'/',
-                'rule'=>array('module'=>'App','controller'=>'default','action'=>'index'))
+                'rule'=>array('module'=>'App','controller'=>'page','action'=>'index'))
         );
 		if(empty(self::$ext)){
-			// /cn/app/default/index
-			array_push(self::$routes,array('uri'=>'/^\/([a-z]{2})\/([A-Za-z0-9]+)\/([A-Za-z]+)\/([A-Za-z0-9]+).*$/',
-							'rule'=>array('lang'=>'{1}','module'=>'{2}','controller'=>'{3}','action'=>'{4}'))
-			);
-			// /en/default/index
+            //模块路由
+            foreach(\Routes::$enableModules as $module){
+                $module = strtolower($module);
+                // /cn/app/page/index
+                array_push(self::$routes,array('uri'=>'/^\/([a-z]{2})\/'.$module.'\/([A-Za-z]+)\/([A-Za-z0-9]+).*$/',
+                        'rule'=>array('lang'=>'{1}','module'=>$module,'controller'=>'{2}','action'=>'{3}'))
+                );
+
+                // /app/page/index
+                array_push(self::$routes,array('uri'=>'/^\/'.$module.'\/([A-Za-z0-9]+)\/([A-Za-z0-9]+).*$/',
+                        'rule'=>array('lang'=>'','module'=>$module,'controller'=>'{1}','action'=>'{2}'))
+                );
+            }
+
+			// /en/page/index
 			array_push(self::$routes,array('uri'=>'/^\/([a-z]{2})\/([A-Za-z0-9]+)\/([A-Za-z0-9]+).*$/',
 							'rule'=>array('lang'=>'{1}','module'=>self::$defaultModule,'controller'=>'{2}','action'=>'{3}'))
 			);
-			// /app/default/index
-			array_push(self::$routes,array('uri'=>'/^\/([A-Za-z]+)\/([A-Za-z0-9]+)\/([A-Za-z0-9]+).*$/',
-							'rule'=>array('lang'=>'','module'=>'{1}','controller'=>'{2}','action'=>'{3}'))
-			);
-			// /default/index
+			// /page/index
 			array_push(self::$routes,array('uri'=>'/^\/([A-Za-z0-9]+)\/([A-Za-z0-9]+).*$/',
 							'rule'=>array('lang'=>'','module'=>self::$defaultModule,'controller'=>'{1}','action'=>'{2}'))
 			);
 		}else {
-			// /cn/app/default/index.html
-			array_push(self::$routes,array('uri'=>'/^\/([a-z]{2})\/([A-Za-z]+)\/([A-Za-z0-9]+)\/([A-Za-z0-9]+)'.self::$ext.'$/',
-							'rule'=>array('lang'=>'{1}','module'=>'{2}','controller'=>'{3}','action'=>'{4}'))
-			);
-			// /en/default/index.html
+            //模块路由
+            foreach(\Routes::$enableModules as $module){
+                $module = strtolower($module);
+                // /cn/app/page/index.html
+                array_push(self::$routes,array('uri'=>'/^\/([a-z]{2})\/'.$module.'\/([A-Za-z0-9]+)\/([A-Za-z0-9]+)'.self::$ext.'$/',
+                        'rule'=>array('lang'=>'{1}','module'=>$module,'controller'=>'{2}','action'=>'{3}'))
+                );
+
+                // /app/page/index.html
+                array_push(self::$routes,array('uri'=>'/^\/'.$module.'\/([A-Za-z0-9]+)\/([A-Za-z0-9]+)'.self::$ext.'$/',
+                        'rule'=>array('lang'=>'','module'=>$module,'controller'=>'{1}','action'=>'{2}'))
+                );
+            }
+
+			// /en/page/index.html
 			array_push(self::$routes,array('uri'=>'/^\/([A-Za-z]+)\/([A-Za-z0-9]+)\/([A-Za-z0-9]+)'.self::$ext.'$/',
 							'rule'=>array('lang'=>'{1}','module'=>self::$defaultModule,'controller'=>'{2}','action'=>'{3}'))
 			);
-			// /app/default/index.html
-			array_push(self::$routes,array('uri'=>'/^\/([A-Za-z]+)\/([A-Za-z0-9]+)\/([A-Za-z0-9]+)'.self::$ext.'$/',
-							'rule'=>array('lang'=>'','module'=>'{1}','controller'=>'{2}','action'=>'{3}'))
-			);
-			// /default/index.html
+
+			// /page/index.html
 			array_push(self::$routes,array('uri'=>'/^\/([A-Za-z0-9]+)\/([A-Za-z0-9]+)'.self::$ext.'$/',
 							'rule'=>array('lang'=>'','module'=>self::$defaultModule,'controller'=>'{1}','action'=>'{2}'))
 			);

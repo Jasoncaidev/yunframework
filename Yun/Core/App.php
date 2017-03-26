@@ -108,7 +108,7 @@ abstract class App{
      * @return null
      *  */
     public static function dispatch(){
-        if(Router::$match != null) {
+        if(!empty(Router::$module) && !empty(Router::$controller) && !empty(Router::$action)) {
             self::$module =  Router::$module;
             self::$controllerName =  Router::$controller;
             self::$controllerFullName =  'www\Apps\\'.Router::$module . '\\Controller\\' . Router::$controller .'Controller';

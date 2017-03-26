@@ -28,6 +28,7 @@ abstract class Lang{
      * @return mixed
      */
     public static function get($key){
+//        debug(App::$language);
         $lang_path = explode('.',$key);
         //language name
         $key_last = array_pop($lang_path);
@@ -39,7 +40,7 @@ abstract class Lang{
             $file_langs = App::$langs[$file_name];
         }else{
             $file_path = $file_name.'.php';
-            $file_langs_module = APP_ROOT.'App/'.Router::$module.'/Lang/'.App::$language.'/'.$file_path;
+            $file_langs_module = APP_ROOT.'Apps/'.Router::$module.'/Lang/'.App::$language.'/'.$file_path;
             if(file_exists($file_langs_module)){
                 $file_langs = include_once $file_langs_module;
                 $file_langs = array_change_key_case($file_langs,CASE_LOWER);

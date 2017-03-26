@@ -116,7 +116,7 @@ function redirect($url){
 function debug($var, $exit = true, $mode = 0){
     if(Config::get('app.debug')){
         $debug = debug_backtrace();
-        echo '<pre class="yun-debug" style="background:#F9F3C5;padding:10px;">';
+        echo '<pre class="yun-debug" style="background:#F9F3C5;padding:10px;text-align:left;">';
         echo '<div class="file" style="color:#f00;">',$debug[0]['file'],'    ',$debug[0]['line'],PHP_EOL,'</div>';
         switch($mode){
             case 0: print_r($var); break;
