@@ -1,14 +1,13 @@
 <?php
 /*
- * @file /yun/core/app.php
+ * @file /Yun/Core/App.php
  * @project  Yun framework project
- * @package  Yun.sys.core
  * @author  Yunframework team
  * @contact  yunframework@gmail.com
- * @copyright  Copyright 2012-2013   Yun(tm)	http://www.yunframework.com
+ * @copyright  Copyright 2013-2017   Yun(tm)	http://www.yunframework.com
  * @license  GPL 2.0
  * @version   0.1.0
- * @decription Application类，处理web请求。
+ * @decription App类。
  * @modify 2016-08-08
  **/
 namespace Yun\Core;
@@ -20,7 +19,7 @@ use Yun\Classes\Messages;
 use Config;
 use Cache;
 use DB,Router;
-//use Yun\library\db;
+
 abstract class App{
     public static $configs;
     //请求
@@ -57,8 +56,6 @@ abstract class App{
     public static function init(){
         /*初始化框架*/
         Yun::init();
-//        set_error_handler(array(self::class,'errorHandler'));
-//        set_exception_handler(array(self::class,'exceptionHandler'));
         self::$request = new Request();
         self::$response = new Response();
         self::$messages = new Messages();

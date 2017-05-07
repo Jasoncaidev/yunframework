@@ -1,6 +1,6 @@
 <?php
 /*
- * @file /www/Apps/Model/Base.php
+ * @file /www/Apps/App/Model/Base.php
  * @project  Yun framework project
  * @author  Yunframework team
  * @contact  yunframework@gmail.com

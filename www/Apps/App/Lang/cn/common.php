@@ -1,10 +1,10 @@
 <?php 
 
 return [
-	'yunframework' => '云框架',
+	'yunframework' => 'YUN框架',
 	'version' => '版本',
 	'hello' => '你好',
-	'welcome home' => '欢迎使用云（yunframework）框架',
+	'welcome' => '欢迎使用YUN',
 	'homepage' => '首页',
 	'doc' => '文档',
 	'about' => '关于',

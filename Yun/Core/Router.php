@@ -1,18 +1,18 @@
 <?php
 /* 
- * @file /yun/core/router.php
+ * @file /Yun/Core/Router.php
  * @project  Yun framework project
- * @package  Yun.core
  * @author  Yunframework team
  * @contact  yunframework@gmail.com
- * @copyright  Copyright 2012-2016   Yun(tm)    http://www.yunframework.com
+ * @copyright  Copyright 2013-2017   Yun(tm)    http://www.yunframework.com
  * @license  GPL 2.0
  * @version   0.1.0
  * @decription 路由类。
- * @modify 2016-08-04
+ * @modify 2017-4-9
  **/
 namespace Yun\Core;
 use Yun\Classes\Config;
+
 abstract class Router{
     
     public static $init = FALSE;
@@ -41,7 +41,7 @@ abstract class Router{
 		if(!self::$init){
             self::setDefaultModule(\Routes::$defaultModule);
             self::__defaultRoute();//默认路由
-			\Routes::setRoutes();//读取路由规则
+            \Routes::setRoutes();//读取路由规则
             self::$module = self::$defaultModule;
 			//self::setDefaultLang();//默认语言
 			self::routeRequest();
@@ -153,47 +153,49 @@ abstract class Router{
 			self::$action = $route['action'];
 			self::$match = array('uri'=>$uri,'rule'=>$uri);
 			return true;
-		}elseif(!is_array($uri) && preg_match('/^\/.*\/$/',$uri)){
-			//如果为正则字符串
+		}elseif(!is_array($uri) && preg_match('/^\/\^.*\$\/$/',$uri)){
+			//如果为正则字符串 正则格式/^\/controler\/action\$/ 已/^开头$/结尾
 			//如果匹配
 			if(preg_match($uri,App::$request->here)){
-//				debug(func_get_args(),0);
 				self::$match = array('uri'=>$uri,'rule'=>$route);
 				preg_match_all($uri,App::$request->here,$uri_matches);
+                /*语言*/
 				if(empty($route['lang']))
 					$route['lang'] = self::$lang;
-				//如果是{1}格式
-				if(preg_match('{\d+}',$route['lang'])){
-					preg_match('{(\d+)}',$route['lang'],$a_match);
+				//如果是$1格式
+				if(preg_match('/^\$\d+/',$route['lang'])){
+					preg_match('/^\$(\d+)/',$route['lang'],$a_match);
 					$lang_offset = $a_match[1];
 					self::$lang = strtolower($uri_matches[$lang_offset][0]);
 				}else{
 					//普通字符串
 					self::$lang = strtolower($route['lang']);
 				}
-				//如果是{1}格式
-				if(preg_match('{\d+}',$route['module'])){
-					preg_match('{(\d+)}',$route['module'],$a_match);
+//                debug($uri_matches);
+                /*模块*/
+				//如果是$1格式
+				if(preg_match('/^\$\d+/',$route['module'])){
+					preg_match('/^\$(\d+)/',$route['module'],$a_match);
 					$module_offset = $a_match[1];
-					self::$module = ucfirst($uri_matches[$module_offset][0]);
+					self::$module = ucfirst($uri_matches[$module_offset][0]);echo 3;
 				}else{
 					//普通字符串
 					self::$module = ucfirst($route['module']);
 				}
-				//如果是{1}格式
-				if(preg_match('{\d+}',$route['controller'])){
-					preg_match('{(\d+)}',$route['controller'],$a_match);
-					//debug($a_match);
+                /*控制器*/
+				//如果是$1格式
+				if(preg_match('/^\$\d+/',$route['controller'])){
+					preg_match('/^\$(\d+)/',$route['controller'],$a_match);
 					$controller_offset = $a_match[1];
 					self::$controller = ucfirst($uri_matches[$controller_offset][0]);
 				}else{
 					//普通字符串
 					self::$controller = ucfirst($route['controller']);
 				}
-				//如果是{1}格式
-				if(preg_match('{\d+}',$route['action'])){
-					preg_match('{(\d+)}',$route['action'],$a_match);
-					//debug($a_match);
+                /*Action*/
+				//如果是$1格式
+				if(preg_match('/^\$\d+/',$route['action'])){
+					preg_match('/^\$(\d+)/',$route['action'],$a_match);
 					$action_offset = $a_match[1];
 					self::$action = $uri_matches[$action_offset][0];
 				}else{
@@ -204,8 +206,8 @@ abstract class Router{
                 //URL请求参数
                 if(!empty($_request_params)){
                     foreach($_request_params as $name => $offset){
-                        preg_match('{(\d+)}',$offset,$param_match);
-                        App::$request->get[$name] = $_GET[$name] = $uri_matches[$param_match[1]][0];
+                        preg_match('(\d+)',$offset,$param_match);
+                        App::$request->get[$name] = $_GET[$name] = $uri_matches[$param_match[0]][0];
                     }
 
                 }
@@ -241,47 +243,47 @@ abstract class Router{
             foreach(\Routes::$enableModules as $module){
                 $module = strtolower($module);
                 // /cn/app/page/index
-                array_push(self::$routes,array('uri'=>'/^\/([a-z]{2})\/'.$module.'\/([A-Za-z]+)\/([A-Za-z0-9]+).*$/',
-                        'rule'=>array('lang'=>'{1}','module'=>$module,'controller'=>'{2}','action'=>'{3}'))
+                array_push(self::$routes,array('uri'=>'/^\/([a-z]$2)\/'.$module.'\/([A-Za-z]+)\/([A-Za-z0-9]+).*$/',
+                        'rule'=>array('lang'=>'$1','module'=>$module,'controller'=>'$2','action'=>'$3'))
                 );
 
                 // /app/page/index
                 array_push(self::$routes,array('uri'=>'/^\/'.$module.'\/([A-Za-z0-9]+)\/([A-Za-z0-9]+).*$/',
-                        'rule'=>array('lang'=>'','module'=>$module,'controller'=>'{1}','action'=>'{2}'))
+                        'rule'=>array('lang'=>'','module'=>$module,'controller'=>'$1','action'=>'$2'))
                 );
             }
 
 			// /en/page/index
-			array_push(self::$routes,array('uri'=>'/^\/([a-z]{2})\/([A-Za-z0-9]+)\/([A-Za-z0-9]+).*$/',
-							'rule'=>array('lang'=>'{1}','module'=>self::$defaultModule,'controller'=>'{2}','action'=>'{3}'))
+			array_push(self::$routes,array('uri'=>'/^\/([a-z]$2)\/([A-Za-z0-9]+)\/([A-Za-z0-9]+).*$/',
+							'rule'=>array('lang'=>'$1','module'=>self::$defaultModule,'controller'=>'$2','action'=>'$3'))
 			);
 			// /page/index
 			array_push(self::$routes,array('uri'=>'/^\/([A-Za-z0-9]+)\/([A-Za-z0-9]+).*$/',
-							'rule'=>array('lang'=>'','module'=>self::$defaultModule,'controller'=>'{1}','action'=>'{2}'))
+							'rule'=>array('lang'=>'','module'=>self::$defaultModule,'controller'=>'$1','action'=>'$2'))
 			);
 		}else {
             //模块路由
             foreach(\Routes::$enableModules as $module){
                 $module = strtolower($module);
                 // /cn/app/page/index.html
-                array_push(self::$routes,array('uri'=>'/^\/([a-z]{2})\/'.$module.'\/([A-Za-z0-9]+)\/([A-Za-z0-9]+)'.self::$ext.'$/',
-                        'rule'=>array('lang'=>'{1}','module'=>$module,'controller'=>'{2}','action'=>'{3}'))
+                array_push(self::$routes,array('uri'=>'/^\/([a-z]$2)\/'.$module.'\/([A-Za-z0-9]+)\/([A-Za-z0-9]+)'.self::$ext.'$/',
+                        'rule'=>array('lang'=>'$1','module'=>$module,'controller'=>'$2','action'=>'$3'))
                 );
 
                 // /app/page/index.html
                 array_push(self::$routes,array('uri'=>'/^\/'.$module.'\/([A-Za-z0-9]+)\/([A-Za-z0-9]+)'.self::$ext.'$/',
-                        'rule'=>array('lang'=>'','module'=>$module,'controller'=>'{1}','action'=>'{2}'))
+                        'rule'=>array('lang'=>'','module'=>$module,'controller'=>'$1','action'=>'$2'))
                 );
             }
 
 			// /en/page/index.html
 			array_push(self::$routes,array('uri'=>'/^\/([A-Za-z]+)\/([A-Za-z0-9]+)\/([A-Za-z0-9]+)'.self::$ext.'$/',
-							'rule'=>array('lang'=>'{1}','module'=>self::$defaultModule,'controller'=>'{2}','action'=>'{3}'))
+							'rule'=>array('lang'=>'$1','module'=>self::$defaultModule,'controller'=>'$2','action'=>'$3'))
 			);
 
 			// /page/index.html
 			array_push(self::$routes,array('uri'=>'/^\/([A-Za-z0-9]+)\/([A-Za-z0-9]+)'.self::$ext.'$/',
-							'rule'=>array('lang'=>'','module'=>self::$defaultModule,'controller'=>'{1}','action'=>'{2}'))
+							'rule'=>array('lang'=>'','module'=>self::$defaultModule,'controller'=>'$1','action'=>'$2'))
 			);
 		}
 

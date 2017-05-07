@@ -87,7 +87,7 @@ public $queryString = '';
  *
  * @var string
  */
-    public static $isAJAX = FALSE;
+    public $isAJAX = FALSE;
 /**
  * Constructor
  *
@@ -327,7 +327,7 @@ public $queryString = '';
  * @return string
  */
     public function setAjax($is = TRUE) {
-        self::$isAJAX = $is;
+        $this->isAJAX = $is;
     }
 
 }

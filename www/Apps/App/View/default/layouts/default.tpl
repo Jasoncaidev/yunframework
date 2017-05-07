@@ -8,12 +8,13 @@
 <meta name="generator" content="Yunframework 1.0" />
 <meta name="author" content="Yunframework Team" />
 <meta name="copyright" content="2013-2016 Yunframework Inc." />
-<link rel="stylesheet" type="text/css" href="<?php echo $webroot ?>css/style.css?<?php echo $VERSION ?>" />
-<script src="<?php echo $webroot ?>js/jquery-1.7.1.min.js?<?php echo $VERSION ?>" type="text/javascript"></script>
+<!--<link rel="stylesheet" type="text/css" href="<?php echo $webroot ?>css/yun.css" />-->
+<?php Html::css('css/yun.css')?>
+<?php Html::script('js/jquery-1.7.1.min.js')?>
 <title><?php echo $page_title ?></title>
 </head>
-<body class="yf-page app">
-<div class="yf-wrap">
+<body class="yun-page app">
+<div class="yun-wrap">
 <?php $this->element('header') ?>
 
 <?php $this->tpl() ?>

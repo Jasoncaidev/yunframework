@@ -1,12 +1,11 @@
 <?php 
 
 return [
-	'yunframework' => 'yun framework',
+	'yunframework' => 'yunframework',
 	'version' => 'version',
-	'hello' => 'hello guy',
+	'hello' => 'Hello',
 	'welcome home' => 'welcome to yunframework',
 	'homepage' => 'Home',
-	'doc' => 'Documents',
+	'doc' => 'Document',
 	'about' => 'About',
-	'official website' => 'Our site',
 ];

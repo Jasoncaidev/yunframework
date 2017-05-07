@@ -23,7 +23,7 @@ class Html{
      * @param $css_file
      */
     public static function css($css_file){
-        echo '<link rel="stylesheet" type="text/css" href="'.self::load($css_file).'" />'.PHP_EOL;
+        echo '<link href="'.self::load($css_file).'" rel="stylesheet" type="text/css" />'.PHP_EOL;
 
 	}
 
@@ -41,7 +41,7 @@ class Html{
      */
     public static function img($img_file){
         echo '<img src="'.self::load($img_file).'"  border=0 />'.PHP_EOL;
-        echo self::load($img_file);
+//        echo self::load($img_file);
     }
 
     /**
@@ -79,6 +79,13 @@ class Html{
      * @return string
      */
     public static function url($path, $params = [], $lang = '',$output = true){
+        if(!defined('YUN_MODULE')){
+            $url = strtolower($path);
+            if($output)
+                echo $url;
+            else
+                return $url;
+        }
         $url = "/";
         $path_url_array = parse_url($path);
         //

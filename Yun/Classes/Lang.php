@@ -30,9 +30,9 @@ abstract class Lang{
     public static function get($key){
 //        debug(App::$language);
         $lang_path = explode('.',$key);
-        //language name
+        //键名
         $key_last = array_pop($lang_path);
-        //language file
+        //获取文件名
         $file_name = array_shift($lang_path);
         $file_name = empty($file_name)?'common':$file_name;
 

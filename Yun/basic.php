@@ -115,6 +115,10 @@ function redirect($url){
  */
 function debug($var, $exit = true, $mode = 0){
     if(Config::get('app.debug')){
+        if(!headers_sent())
+        {
+            header("Content-type: text/html; charset=utf-8");
+        }
         $debug = debug_backtrace();
         echo '<pre class="yun-debug" style="background:#F9F3C5;padding:10px;text-align:left;">';
         echo '<div class="file" style="color:#f00;">',$debug[0]['file'],'    ',$debug[0]['line'],PHP_EOL,'</div>';
@@ -129,7 +133,23 @@ function debug($var, $exit = true, $mode = 0){
     }
 
 }
-
+/**
+ * 打印信息
+ * @param $var  信息内容
+ * @param bool|true $exit   是否结束并退出
+ * @param int $mode
+ */
+function pre($var, $exit = false, $mode = 0){
+        echo '<pre class="yun-pre" style="background:#fcf8e3;border:1px solid #faebcc;padding:10px;margin-top:10px;text-align:left;">';
+        switch($mode){
+            case 0: print_r($var); break;
+            case 1: var_dump($var); break;
+            default: print_r($var);
+        }
+        echo '</pre>';
+        if($exit)
+            exit;
+}
 /**
  * 打印SQL
  */

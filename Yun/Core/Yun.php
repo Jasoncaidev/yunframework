@@ -1,20 +1,20 @@
 <?php
 /*
- * @file /yun/core/yun.php
+ * @file /Yun/Core/Yun.php
  * @project  Yun framework project
- * @package  Yun.sys.core
+ * @package  Yun.Core.core
  * @author  Yunframework team
  * @contact  yunframework@gmail.com
- * @copyright  Copyright 2012-2013   Yun(tm)    http://www.yunframework.com
+ * @copyright  Copyright 2013-2017   Yun(tm)    http://www.yunframework.com
  * @license  GPL 2.0
  * @version   0.1.0
- * @decription 全局Yun类，组织框架。
- * @modify 2016-08-02
+ * @decription Yun类，组织框架。
+ * @modify 2017-4-9
  **/
 namespace Yun\Core;
 use Yun\Classes\YUNException;
 use Yun\Classes\Cache;
-use Router;
+use Router,DB,Config;
 abstract class Yun{
 
     /*  */
@@ -34,7 +34,6 @@ abstract class Yun{
      * 自动加载类
      * */
     public static function autoload($className){
-
         $file = self::findFile($className);
         if($file!==false){
             require_once $file;
@@ -82,22 +81,25 @@ abstract class Yun{
         /*        if(file_exists($file)){
                        return $file;
                 }*/
+
+        /*第三方库*/
+        $ArrTmp = $classArr;
+        $ArrTmp[0] = strtolower($ArrTmp[0]);
+        $ArrTmp[1] = strtolower($ArrTmp[1]);
+        $PathTmp = implode(DS,$ArrTmp);
+        $file = YUN_ROOT.'vendor'.DS.$PathTmp.DOT.EXT;
+        if(file_exists($file)){
+            return $file;
+        }
         /*在项目文件中查找*/
+        if(count($classArr)>1)
+        array_shift($classArr);
+        $classPath = implode(DS,$classArr);
         $file = APP_ROOT . $classPath . DOT . EXT;
         if(file_exists($file)){
-            //echo $file."<br />";
             return $file;
         }elseif(file_exists(strtolower($file))){
             return strtolower($file);
-        }
-        /*第三方库*/
-        $classArr[0] = strtolower($classArr[0]);
-        $classArr[1] = strtolower($classArr[1]);
-        $classPath = implode(DS,$classArr);
-        $file = YUN_ROOT.'vendor'.DS.$classPath.DOT.EXT;
-        //echo $file."<br />";
-        if(file_exists($file)){
-            return $file;
         }
         return FALSE;
     }
@@ -122,7 +124,10 @@ abstract class Yun{
      * */
     public static function shutdown(){
         if(!Yun::$init) return FALSE;
-
+        if(Config::get('app.debug') == 3){
+            pre(DB::getQueryLog());
+            pre(Router::$match);
+        }
         if (App::$errors AND $error = error_get_last() AND in_array($error['type'], Yun::$shutdown_errors))
         {
             // 清除OB
@@ -175,18 +180,32 @@ abstract class Yun{
             $line    = $e->getLine();
             // 
             $trace = $e->getTrace();
+
             if ( ! headers_sent())
             {
                 header('Content-Type: text/html; charset='.Yun::$charset, TRUE, 500);
-                if($code>=400 && $code<500) {
+                if($code >= 400 && $code < 500) {
                     header("HTTP/1.1 404 Not Found");
                 }else{
                     header("HTTP/1.1 500 Internal Server Error");
                 }
-                if(class_exists('\Apps\\'.strtolower(App::$module).'\Controller\ErrorController')){
-                    header('Location: '.url('/error/index'));
-                }else{
-                    header('Location: '.url('/'.strtolower(Router::$defaultModule).'/error/index'));
+                if(empty(App::$module) || App::$module == Router::$defaultModule)
+                {
+//                    header('Location: '.url('/error/index'));
+                    Router::$module = Router::$defaultModule;
+                    Router::$controller = "Error";
+                    Router::$action = "index";
+                    App::dispatch();
+                    App::launch();
+                }
+                else
+                {
+//                    header('Location: '.url('/'.strtolower(App::$module).'/error/index'));
+                    Router::$module = App::$module;
+                    Router::$controller = "Error";
+                    Router::$action = "index";
+                    App::dispatch();
+                    App::launch();
                 }
                 exit;
             }
