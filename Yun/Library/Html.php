@@ -63,10 +63,10 @@ class Html{
         $suffix = '';
         if(strpos($file,'?')===false)
             $suffix = '?'.Config::get('app.file_version');
-        if($config['type'] == 'local'){
-            return WEB_ROOT.$file.$suffix;
-        }elseif($config['type'] == 'host'){
+        if($config['type'] == 'host'){
             return $config['host'].$file.$suffix;
+        }else{
+            return WEB_ROOT.$file.$suffix;
         }
     }
 

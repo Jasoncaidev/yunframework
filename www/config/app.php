@@ -41,7 +41,7 @@ return [
     |
     */
     'fallback_locale' => env('APP_FALLBACK_LOCALE', 'en'),
-    'domain' => 'DayTradingNotes.com',
+    'domain' => 'yunframework.com',
     'file_version' => date('Ymd',time()),
     'gzip' => true,
     //URL格式 （PATH_INFO，NATIVE）
@@ -56,6 +56,6 @@ return [
     //资源文件配置
     'resource' =>[
         'type'=>'host',//host,local
-        'host'=>'http://www.yun.org/',
+        'host'=>'http://www.yunframework.com/',
     ],
 ];
